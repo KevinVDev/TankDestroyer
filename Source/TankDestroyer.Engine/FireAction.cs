@@ -17,6 +17,11 @@ public class FireAction : TankAction
             return false;
         }
 
+        if (tank.Ammo == 0)
+        {
+            return false;
+        }
+
         Bullet bullet = new(tank.OwnerId)
         {
             X = tank.X,
@@ -27,6 +32,14 @@ public class FireAction : TankAction
         };
         tank.Fired = true;
         game.Bullets.Add(bullet);
+        tank.Ammo--;
+
+        var tile = game.World.GetTile(tank.X, tank.Y);
+        if (tile.TileType == TileType.Tree || tile.TileType == TileType.Building)
+        {
+            tile.TileType = TileType.Grass;
+        }
+
         return true;
     }
 }
